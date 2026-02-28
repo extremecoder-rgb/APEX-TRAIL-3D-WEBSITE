@@ -1,0 +1,353 @@
+/* ============================================
+   APEX TRAIL - Component Styles
+   Custom Cursor, 3D Annotations, Utilities
+   ============================================ */
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+.cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 10000;
+  mix-blend-mode: difference;
+  transition: transform 0.15s var(--ease-out-expo);
+}
+
+.cursor-crosshair {
+  width: 100%;
+  height: 100%;
+  color: white;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.cursor.hover .cursor-crosshair {
+  transform: scale(1.5);
+}
+
+.cursor-trail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.cursor.moving .cursor-trail {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.5;
+}
+
+/* Hide default cursor */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  
+  a, button, [role="button"] {
+    cursor: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
+
+/* ============================================
+   3D ANNOTATIONS
+   ============================================ */
+.annotation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.annotation {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.annotation-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent), 0 0 40px rgba(0, 255, 178, 0.5);
+  position: relative;
+  cursor: pointer;
+  animation: annotation-pulse 2s ease-in-out infinite;
+}
+
+@keyframes annotation-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--color-accent), 0 0 40px rgba(0, 255, 178, 0.5);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 30px var(--color-accent), 0 0 60px rgba(0, 255, 178, 0.7);
+  }
+}
+
+.annotation-marker::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0, 255, 178, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: annotation-ring 2s ease-out infinite;
+}
+
+@keyframes annotation-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.annotation-label {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(8, 8, 8, 0.9);
+  border: 1px solid rgba(0, 255, 178, 0.3);
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-10px);
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  backdrop-filter: blur(10px);
+}
+
+.annotation:hover .annotation-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.annotation-label h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.annotation-label p {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  transition: opacity var(--duration-slow) var(--ease-out-expo), visibility var(--duration-slow);
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  letter-spacing: 0.2em;
+  margin-bottom: var(--space-md);
+}
+
+.loading-bar {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.loading-progress {
+  height: 100%;
+  width: 0%;
+  background: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.loading-text {
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+/* ============================================
+   PARTICLE SYSTEM
+   ============================================ */
+.particle {
+  position: absolute;
+  background: var(--color-accent);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ============================================
+   BUTTON VARIANTS
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 1rem 2rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+.btn-primary:hover {
+  background: #00e6a0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 255, 178, 0.3);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+/* ============================================
+   CARD 3D TILT EFFECT
+   ============================================ */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.tilt-card-inner {
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+  transform-style: preserve-3d;
+}
+
+/* ============================================
+   REVEAL ANIMATIONS
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all var(--duration-slow) var(--ease-out-expo);
+}
+
+/* ============================================
+   STAGGER DELAYS
+   ============================================ */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+
+/* ============================================
+   CANVAS CONTAINERS
+   ============================================ */
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+.hide-mobile {
+  display: inherit;
+}
+
+.hide-desktop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  .hide-desktop {
+    display: inherit !important;
+  }
+}
